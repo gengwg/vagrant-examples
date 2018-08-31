@@ -1,0 +1,52 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.define "deploy" do |deploy|
+
+    deploy.vm.provider "virtualbox" do |v|
+
+        v.name = "deploy"
+
+        v.memory = 512
+
+        v.cpus = 1
+
+    end
+
+    deploy.vm.box = "debian/stretch64"
+
+    deploy.vm.hostname = "deploy"
+
+    deploy.vm.network :private_network, ip: "10.1.0.4"
+
+  end
+
+end
+
+
+Vagrant.configure("2") do |config|
+
+  (1..3).each do |i|
+
+    config.vm.define "node#{i}" do |node|
+
+      node.vm.box = "debian/stretch64"
+
+      node.vm.hostname="node#{i}"
+
+      node.vm.network "private_network", ip: "10.1.0.#{i}"
+
+      node.vm.provider "virtualbox" do |v|
+
+        v.name = "node#{i}"
+
+        v.memory = 512
+
+        v.cpus = 1
+
+      end
+
+    end
+
+  end
+
+end
